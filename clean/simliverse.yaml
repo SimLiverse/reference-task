@@ -1,0 +1,27 @@
+# What this run is built from.
+#
+# Named after Isaac Lab Arena's primitives — Scene x Embodiment x Task —
+# because Arena is what composes them into an environment. This file only says
+# *which* ones, and the platform resolves each to a content hash at submission.
+#
+# The robot is deliberately not in this repository. Code and assets have
+# different lifecycles: a URDF is reviewed by whoever owns the hardware, gets
+# gated for inertia and joint limits, and is versioned by its bytes. Keeping it
+# in git means the run's robot is "whatever was on that branch", which is not a
+# thing anyone can reproduce a year later.
+
+task: G1-Flat-v0
+entrypoint: python train.py --num_envs 4096
+
+assets:
+  # `@v3` pins a gate-approved version. Drop the suffix to take the latest —
+  # convenient while iterating, and still recorded as a hash, so the run
+  # remembers exactly which bytes it used rather than the word "latest".
+  embodiment: assets/unitree/g1_29dof.urdf@v3
+  scene: assets/terrain/flat_plane.usd@v1
+  props: []
+
+# Not set here: the seed. The platform assigns it and passes `--seed N`.
+# A seed the script picks for itself is a seed nobody recorded, and a run
+# whose seed was never recorded cannot belong to a seed family — which is
+# the only way to tell a real improvement from a lucky draw.
